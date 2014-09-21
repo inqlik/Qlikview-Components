@@ -28,7 +28,7 @@ ELSE
 	SET _qvctemp.ScanningThisQvw=0;		// Indicate we are scanning QVW named in param1
 ENDIF
 
-LET _qvctemp.SaveErrorMode=$(ErrorMode);	// Save the current ErrorMode
+LET _qvctemp.SaveErrorMode=$(ErrorMode); // Save the current ErrorMode  
 SET ErrorMode=0;		// Set ErrorMode to 0 -- we may have some file paths we can't read
 
 //==== Begin of nested SUB for scanning referenced QVDs. ===

@@ -30,7 +30,7 @@ WHERE len(trim(ColorVariable))>0 and left(trim(ColorVariable),2) <> '//'
 
 CALL Qvc.PopulateVariables('$(_colorTable)', -1);
 
-TRACE >>> len of parm2 $(x);
+//TRACE >>> len of parm2 $(x); Comment out tracing of uninitialized variable x 
 FOR _qvctemp.idx = 0 to NoOfRows('$(_colorTable)')-1;
 	// Get the varname for this row
 	LET _qvctemp.varname = peek('_qvctemp.ColorVariable',$(_qvctemp.idx),'$(_colorTable)');

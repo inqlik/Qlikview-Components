@@ -125,7 +125,7 @@ IF $(_vQvdExists) THEN		// QVD exists, we will do an incremental reload
 
 	// Create a where predicate
 	LET Qvc.Loader.v.IncrementalExpression = '$(_vSqlModField) ' & $(_tempLoaderPredicate($(_vDate.Max)));	
-	Call Qvc.log ('Loading rows where $(Qvc.Loader.v.IncrementalExpression)') 
+	Call Qvc.Log ('Loading rows where $(Qvc.Loader.v.IncrementalExpression)') 
 	
 ELSE						// QVD does not exist
 	IF len('$(Qvc.Loader.v.BaseValue)') > 0 THEN 
@@ -136,9 +136,9 @@ ELSE						// QVD does not exist
 		SET Qvc.Loader.v.IncrementalFloor =;
 	ENDIF
 	IF '$(_vForceFullReload)' THEN
-		Call Qvc.log ('ForceFullReload requested. Doing full reload where $(Qvc.Loader.v.IncrementalExpression).');
+		Call Qvc.Log ('ForceFullReload requested. Doing full reload where $(Qvc.Loader.v.IncrementalExpression).');
 	ELSE 
-		Call Qvc.log ('QVD $(_Qvc.Loader.v.QvdFile) does not exist. Doing full reload where $(Qvc.Loader.v.IncrementalExpression).');
+		Call Qvc.Log ('QVD $(_Qvc.Loader.v.QvdFile) does not exist. Doing full reload where $(Qvc.Loader.v.IncrementalExpression).');
 	ENDIF		
 END IF
 
@@ -189,14 +189,14 @@ CALL Qvc.UpdateQvd ('$(_vTablename)', '$(_vQvdFile)', '$(_vPrimaryKey)', '$(_vDb
 
 
 // Update is done. Log some results */
-CALL Qvc.log( '$(_vQvdFile) updated, rows=' & num(QvdNoOfRecords('$(_vQvdFile)'), '#$(ThousandSep)##0') )
+CALL Qvc.Log( '$(_vQvdFile) updated, rows=' & num(QvdNoOfRecords('$(_vQvdFile)'), '#$(ThousandSep)##0') )
 
 //CALL Qvc.GetFieldValues ('_vDate', '$(_vQvdModField)', '$(_vTablename)');
 //IF Qvc.Loader.v.ModField.Type = 'Datetime' THEN
 //	LET _vDate.Min = timestamp($(_vDate.Min), '$(_vTimestampMask)');
 //	LET _vDate.Max = timestamp($(_vDate.Max), '$(_vTimestampMask)');
 //ENDIF
-//CALL Qvc.log('$(_vQvdFile) min=$(_vDate.Min), max=$(_vDate.Max)')
+//CALL Qvc.Log('$(_vQvdFile) min=$(_vDate.Min), max=$(_vDate.Max)')
 
 DROP TABLE $(_vTablename);
 
