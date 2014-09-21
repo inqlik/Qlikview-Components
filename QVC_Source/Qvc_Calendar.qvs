@@ -10,6 +10,9 @@ SET Qvc.Calendar.v.Field.Year=Year;
 SET Qvc.Calendar.v.Field.Month=Month;
 SET Qvc.Calendar.v.Field.YearMonth=Year-Month;
 SET Qvc.Calendar.v.Field.Quarter=Quarter;
+// Initialize with NULL value variable before it can be read
+SET _Qvc.Calendar.v.Field.Date.Override=;
+
 
 // Name of the optional script file that defines additonal Calendar fields.
 SET Qvc.Calendar.v.ExtFields=CalendarExtFields.qvs;
@@ -111,7 +114,7 @@ SET _f_DateSerial='[$(_fieldPrefix)_DateSerial]';
 LET _concatenate = if($(_Qvc.TableExists($(_tableName))), 'CONCATENATE ([$(_tableName)])', ''); 
    
 [$(_tableName)]:
-$(_concatenate) 
+$(_concatenate) //#!SUPPRESS_ERROR
 LOAD
 	*,
 	dual($(_fYear) & '-' & $(_fMonth),Date(MonthStart($(_fDate),$(_monthOffset))))  as $(_fYearMonth)
@@ -128,9 +131,9 @@ LOAD
     AutoNumber(MonthStart(Date),'$(_f_MonthSerial)') 	as $(_f_MonthSerial),
     AutoNumber(QuarterStart(Date),'$(_f_QuarterSerial)')	as $(_f_QuarterSerial),
     AutoNumber(weekyear(Date) &'|' & week(Date),'$(_f_WeekSerial)')	as $(_f_WeekSerial)
-    $(Include=$(Qvc.Global.Extension.Directory)\$(Qvc.Calendar.v.ExtFields));
+    $(Include=$(Qvc.Global.Extension.Directory)\$(Qvc.Calendar.v.ExtFields)); //#!SUPPRESS_ERROR
 
-;    
+//Comment out dangling semicolon;    
 LOAD date('$(_startDate)' + recno() - 1) as Date 
 AUTOGENERATE date('$(_endDate)') - date('$(_startDate)') + 1
 ;

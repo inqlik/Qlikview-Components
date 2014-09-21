@@ -1,0 +1,38 @@
+﻿///$tab Main
+SET ThousandSep=',';
+SET DecimalSep='.';
+SET MoneyThousandSep=',';
+SET MoneyDecimalSep='.';
+SET MoneyFormat='$#,##0.00;($#,##0.00)';
+SET TimeFormat='h:mm:ss TT';
+SET DateFormat='M/D/YYYY';
+SET TimestampFormat='M/D/YYYY h:mm:ss[.fff] TT';
+SET MonthNames='Jan;Feb;Mar;Apr;May;Jun;Jul;Aug;Sep;Oct;Nov;Dec';
+SET DayNames='Mon;Tue;Wed;Thu;Fri;Sat;Sun';
+
+///$tab Includes
+$(Include=..\qvc_runtime\qvc.qvs);
+///$tab Test Data
+Calendar:
+LOAD 
+	*,
+	Year(Date) as Year,
+	date(MonthStart(Date),'YYYY-MMM') as [Year-Month]
+;	
+LOAD 
+	Date('01/01/2010' + RecNo(),'YYYY-MMM-DD') as Date
+AutoGenerate 366*3
+;
+
+Sales:
+LOAD
+	Date, 
+	round(rand()*1000) * (1+(Month(Date)/12)) as Sales
+Resident Calendar
+;	
+	
+///$tab AsOfTable
+// Create an AsOfTable for the Year-Month field.
+CALL Qvc.AsOfTable('Year-Month');
+///$tab Cleanup
+CALL Qvc.Cleanup;

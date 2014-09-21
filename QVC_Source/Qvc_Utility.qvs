@@ -30,7 +30,7 @@ LOAD
 	// +0 is to fix a bug in V10 where max is getting truncated to 9 digits precision.
 	max([$(_field)])+0 as _qvctemp.maxval,
 	min([$(_field)])+0 as _qvctemp.minval	
-$(_vSource);
+$(_vSource); //#!SUPPRESS_ERROR
 // Replace of European DecimalSep ',' is required to assure returned value is proper decimal number, not formatted string
 LET $(_retvar).Max = replace(peek('_qvctemp.maxval'), ',', '.');
 LET $(_retvar).Min = replace(peek('_qvctemp.minval'), ',', '.');
