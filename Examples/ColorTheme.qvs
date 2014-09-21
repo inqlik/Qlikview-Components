@@ -1,0 +1,53 @@
+﻿///$tab Main
+// Binary load to get sample data
+//BINARY Colors.qvw;
+SET ThousandSep=',';
+SET DecimalSep='.';
+SET MoneyThousandSep=',';
+SET MoneyDecimalSep='.';
+SET MoneyFormat='$#,##0.00;($#,##0.00)';
+SET TimeFormat='h:mm:ss TT';
+SET DateFormat='M/D/YYYY';
+SET TimestampFormat='M/D/YYYY h:mm:ss[.fff] TT';
+SET MonthNames='Jan;Feb;Mar;Apr;May;Jun;Jul;Aug;Sep;Oct;Nov;Dec';
+SET DayNames='Mon;Tue;Wed;Thu;Fri;Sat;Sun';
+
+///$tab Includes
+$(Include=..\qvc_runtime\qvc.qvs);
+///$tab Load Colors
+CALL Qvc.ColorTheme('..\etc\Colors\ColorSample1.xlsm', 'Qvc.ColorTable')
+
+
+///$tab Sample Data
+Customers:
+LOAD * 
+	,RecNo() as CustomerId
+INLINE  [
+Customer
+Happy Corp
+Best Computers	
+Sell Direct
+Buy Direct
+Acme
+]
+;
+LET vNoCustomers = NoOfRows('Customers');
+
+
+Orders:
+LOAD 
+	*
+	,Year(OrderDate) as Year
+;	
+LOAD 
+	date(today()-RecNo()*5) as OrderDate	
+	,Rowno() as OrderId
+	,mod(RecNo(), $(vNoCustomers)) + 1 as CustomerId
+	,round(Rand() * 10000) as Amount
+AUTOGENERATE 100
+;	
+
+SET vNoCustomers=;
+///$tab Cleanup
+CALL Qvc.Cleanup;
+
